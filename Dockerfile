@@ -121,28 +121,28 @@ RUN cd /usr/local/bin \
 
 ENV PYTHONPATH /usr/lib/python3/dist-packages:$PYTHONPATH
 
-#RUN mkdir -p /usr/src/app
-#WORKDIR /usr/src/app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-#RUN pip3 install --no-cache-dir colorlog cython
+RUN pip3 install --no-cache-dir colorlog cython
 
 # For the nmap tracker
-#RUN apt-get update && \
-#    apt-get install -y --no-install-recommends nmap net-tools cython3 libudev-dev sudo && \
-#    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends nmap net-tools cython3 libudev-dev sudo git && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#COPY script/build_python_openzwave script/build_python_openzwave
-#RUN script/build_python_openzwave && \
-#  mkdir -p /usr/local/share/python-openzwave && \
-#  ln -sf /usr/src/app/build/python-openzwave/openzwave/config /usr/local/share/python-openzwave/config
+COPY home-assistant/script/build_python_openzwave script/build_python_openzwave
+RUN script/build_python_openzwave && \
+    mkdir -p /usr/local/share/python-openzwave && \
+    ln -sf /usr/src/app/build/python-openzwave/openzwave/config /usr/local/share/python-openzwave/config
 
-#COPY requirements_all.txt requirements_all.txt
-#RUN pip3 install --no-cache-dir -r requirements_all.txt && \
-#    pip3 install mysqlclient psycopg2 uvloop
+COPY home-assistant/requirements_all.txt requirements_all.txt
+RUN pip3 install --no-cache-dir -r requirements_all.txt && \
+    pip3 install mysqlclient psycopg2 uvloop
 
 # Copy source
-#COPY . .
+COPY home-assistant .
 
 RUN [ "cross-build-end" ]
 
-#CMD [ "python", "-m", "homeassistant", "--config", "/config" ]
+CMD [ "python", "-m", "homeassistant", "--config", "/config" ]
