@@ -127,22 +127,28 @@ WORKDIR /usr/src/app
 RUN pip3 install --no-cache-dir colorlog cython
 
 # For the nmap tracker
-RUN apt-get update && \
+RUN set -x && \
+    apt-get update && \
     apt-get install -y --no-install-recommends nmap net-tools cython3 libudev-dev sudo git && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY home-assistant/script/build_python_openzwave script/build_python_openzwave
-RUN script/build_python_openzwave && \
+ENV HASS_VERSION 0.37
+RUN set -x && \
+    git clone https://github.com/home-assistant/home-assistant.git && \
+    cd home-assistant && \
+    git checkout $HASS_VERSION && \
+    rm -rf .git
+
+RUN set -x && \
+    home-assistant/script/build_python_openzwave && \
     mkdir -p /usr/local/share/python-openzwave && \
     ln -sf /usr/src/app/build/python-openzwave/openzwave/config /usr/local/share/python-openzwave/config
 
-COPY home-assistant/requirements_all.txt requirements_all.txt
-RUN pip3 install --no-cache-dir -r requirements_all.txt && \
+RUN set -x && \
+    pip3 install --no-cache-dir -r home-assistant/requirements_all.txt && \
     pip3 install mysqlclient psycopg2 uvloop
 
 # Copy source
-COPY home-assistant .
-
 RUN [ "cross-build-end" ]
 
-CMD [ "python", "-m", "homeassistant", "--config", "/config" ]
+CMD [ "cd", "home-assistant", "&&", "python", "-m", "homeassistant", "--config", "/config" ]
