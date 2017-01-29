@@ -121,6 +121,8 @@ RUN cd /usr/local/bin \
 
 ENV PYTHONPATH /usr/lib/python3/dist-packages:$PYTHONPATH
 
+# HASS
+ENV HASS_VERSION 0.37
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
@@ -132,7 +134,6 @@ RUN set -x && \
     apt-get install -y --no-install-recommends nmap net-tools cython3 libudev-dev sudo git && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV HASS_VERSION 0.37
 RUN set -x && \
     git clone https://github.com/home-assistant/home-assistant.git && \
     cd home-assistant && \
@@ -148,7 +149,6 @@ RUN set -x && \
     pip3 install --no-cache-dir -r home-assistant/requirements_all.txt && \
     pip3 install mysqlclient psycopg2 uvloop
 
-# Copy source
 RUN [ "cross-build-end" ]
 
 CMD [ "cd", "home-assistant", "&&", "python", "-m", "homeassistant", "--config", "/config" ]
