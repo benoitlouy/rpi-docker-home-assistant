@@ -141,6 +141,7 @@ RUN set -x && \
     rm -rf .git
 
 RUN set -x && \
+    sed -i 's/make/make -j3/' home-assistant/script/build_python_openzwave && \
     home-assistant/script/build_python_openzwave && \
     mkdir -p /usr/local/share/python-openzwave && \
     ln -sf /usr/src/app/build/python-openzwave/openzwave/config /usr/local/share/python-openzwave/config
@@ -151,4 +152,5 @@ RUN set -x && \
 
 RUN [ "cross-build-end" ]
 
-CMD [ "cd", "home-assistant", "&&", "python", "-m", "homeassistant", "--config", "/config" ]
+WORKDIR /usr/src/app/home-assistant
+CMD [ "python", "-m", "homeassistant", "--config", "/config" ]
