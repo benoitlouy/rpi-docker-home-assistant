@@ -122,7 +122,7 @@ RUN cd /usr/local/bin \
 ENV PYTHONPATH /usr/lib/python3/dist-packages:$PYTHONPATH
 
 # HASS
-ENV HASS_VERSION 0.37
+ENV HASS_VERSION 0.37.1
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
