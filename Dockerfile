@@ -25,7 +25,7 @@ RUN set -x && \
     mkdir -p /usr/local/share/python-openzwave && \
     cp -r /usr/src/app/python-openzwave/openzwave/config /usr/local/share/python-openzwave/config
 
-ENV HASS_VERSION 0.39
+ENV HASS_VERSION 0.39.1
 RUN set -x && \
     git clone https://github.com/home-assistant/home-assistant.git && \
     cd home-assistant && \
