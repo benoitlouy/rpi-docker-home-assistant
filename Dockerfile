@@ -1,4 +1,4 @@
-FROM fgabriel/rpi-home-assistant:0.44.1
+FROM fgabriel/rpi-home-assistant:0.45.1
 MAINTAINER Benoit Louy <benoit.louy@fastmail.com>
 
 RUN [ "cross-build-start" ]
